@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load project_tags %}
+
+{% block title %}Projects - TaskFlow Pro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1><i class="fas fa-project-diagram"></i> Projects</h1>
+            <p class="text-muted">Manage and track all your projects</p>
+        </div>
+        <div class="col-md-4 text-end">
+            {% if perms.projects.add_project %}
+                <a href="{% url 'projects:create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> New Project
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" name="search" class="form-control" 
+                           placeholder="Search projects..." value="{{ request.GET.search }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="status" class="form-select">
+                        <option value="">All Status</option>
+                        {% for status_value, status_label in status_choices %}
+                            <option value="{{ status_value }}" 
+                                    {% if request.GET.status == status_value %}selected{% endif %}>
+                                {{ status_label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="priority" class="form-select">
+                        <option value="">All Priority</option>
+                        {% for priority_value, priority_label in priority_choices %}
+                            <option value="{{ priority_value }}"
+                                    {% if request.GET.priority == priority_value %}selected{% endif %}>
+                                {{ priority_label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        {% for project in projects %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'projects:detail' project.pk %}" class="text-decoration-none">
+                                {{ project.name }}
+                            </a>
+                        </h5>
+                        <p class="card-text text-muted">
+                            {{ project.description|truncatewords:20 }}
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge bg-{{ project.status|status_color }}">
+                                {{ project.get_status_display }}
+                            </span>
+                            <span class="badge bg-{{ project.priority|priority_color }}">
+                                {{ project.get_priority_display }}
+                            </span>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted">Progress</small>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ project.progress_percentage }}%;"
+                                     aria-valuenow="{{ project.progress_percentage }}" 
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    {{ project.progress_percentage }}%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <small class="text-muted">Tasks</small>
+                                <h6>{{ project.total_tasks|default:"0" }}</h6>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-muted">Members</small>
+                                <h6>{{ project.members.count }}</h6>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-muted">Hours</small>
+                                <h6>{{ project.hours_logged }}/{{ project.hours_estimated }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">
+                            <i class="fas fa-calendar"></i> Deadline: {{ project.deadline|date:"M d, Y" }}
+                        </small>
+                        <div class="mt-2">
+                            {% for member in project.members.all|slice:":3" %}
+                                <img src="{% if member.avatar %}{{ member.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                                     class="rounded-circle" width="30" height="30"
+                                     alt="{{ member.username }}" title="{{ member.get_full_name|default:member.username }}">
+                            {% endfor %}
+                            {% if project.members.count > 3 %}
+                                <span class="badge bg-secondary">+{{ project.members.count|add:"-3" }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No projects found.
+                    {% if perms.projects.add_project %}
+                        <a href="{% url 'projects:create' %}" class="alert-link">Create your first project</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}">
+                            Previous
+                        </a>
+                    </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}">
+                            {{ num }}
+                        </a>
+                    </li>
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}">
+                            Next
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+

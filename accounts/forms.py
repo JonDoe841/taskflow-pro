@@ -66,14 +66,14 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['user', 'skills', 'hourly_rate', 'github_profile', 'linkedin_profile', 'notification_preferences']
+        fields = ['user', 'skills', 'hourly_rate', 'github_profile', 'linkedin_profile', 'notifications']
         widgets = {
             'skills': forms.Textarea(attrs={
                 'rows': 3,
                 'placeholder': 'Enter your skills separated by commas',
                 'class': 'form-control'
             }),
-            'notification_preferences': forms.HiddenInput(),  # Exclude from rendering
+            'notifications': forms.HiddenInput(),  # Exclude from rendering
         }
         labels = {
             'user': 'Username',
