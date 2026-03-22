@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}400 - Bad Request{% endblock %}
+
+{% block content %}
+<div class="container text-center py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <img src="{% static 'images/400.svg' %}" alt="400 Error" class="img-fluid mb-4" style="max-height: 300px;">
+            
+            <h1 class="display-1 text-warning">400</h1>
+            <h2 class="mb-4">Bad Request</h2>
+            
+            <p class="lead mb-4">
+                The server cannot process your request due to malformed syntax.
+            </p>
+            
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle"></i>
+                Check the URL or request data and try again.
+            </div>
+            
+            <div class="mt-4">
+                <a href="{% url 'core:home' %}" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Return Home
+                </a>
+                <button onclick="location.reload()" class="btn btn-outline-secondary">
+                    <i class="fas fa-sync-alt"></i> Refresh Page
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
