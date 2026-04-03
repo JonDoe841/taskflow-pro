@@ -1,8 +1,11 @@
 from django.utils import timezone
 from rest_framework import serializers
+
+from analytics.models import Report
 from projects.models import Project, Technology
 from tasks.models import Task, TaskComment, TaskTag
 from accounts.models import User, UserProfile
+from teams.models import Team
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -109,3 +112,19 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             done=Count('id', filter=Q(status='done')),
             blocked=Count('id', filter=Q(status='blocked')),
         )
+class TeamSerializer(serializers.ModelSerializer):
+    members = UserSerializer(many=True, read_only=True)
+    projects = ProjectSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Team
+        fields = [
+            'id', 'name', 'description', 'members', 'projects', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['created_at', 'updated_at']
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = '__all__'
+        read_only_fields = ['created_at', 'updated_at']
+CommentSerializer = TaskCommentSerializer

@@ -1,0 +1,412 @@
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/projects/{id}/statistics/</code></td>
+                                                <td>Get project statistics</td>
+                                                <td>Member</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-primary">POST</span></td>
+                                                <td><code>/api/projects/{id}/join/</code></td>
+                                                <td>Join a project</td>
+                                                <td>Authenticated</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <h6>Example Response:</h6>
+                                    <pre class="bg-dark text-light p-3 rounded"><code>{
+  "id": 1,
+  "name": "Website Redesign",
+  "description": "Redesign company website",
+  "status": "active",
+  "priority": "high",
+  "progress": 65.5,
+  "created_by": {
+    "id": 1,
+    "username": "john_doe",
+    "full_name": "John Doe"
+  },
+  "members": [
+    {
+      "user": {
+        "id": 2,
+        "username": "jane_smith",
+        "full_name": "Jane Smith"
+      },
+      "role": "developer"
+    }
+  ],
+  "deadline": "2024-04-15",
+  "created_at": "2024-01-15T10:30:00Z"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tasks Endpoints -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tasksCollapse">
+                                    <i class="fas fa-tasks me-2"></i> Tasks
+                                </button>
+                            </h2>
+                            <div id="tasksCollapse" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Method</th>
+                                                <th>Endpoint</th>
+                                                <th>Description</th>
+                                                <th>Permissions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/tasks/</code></td>
+                                                <td>List all tasks (with filters)</td>
+                                                <td>Authenticated</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-primary">POST</span></td>
+                                                <td><code>/api/tasks/</code></td>
+                                                <td>Create a new task</td>
+                                                <td>Project Member</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/tasks/{id}/</code></td>
+                                                <td>Get task details</td>
+                                                <td>Project Member</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-warning">PUT/PATCH</span></td>
+                                                <td><code>/api/tasks/{id}/</code></td>
+                                                <td>Update a task</td>
+                                                <td>Owner/Manager</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-danger">DELETE</span></td>
+                                                <td><code>/api/tasks/{id}/</code></td>
+                                                <td>Delete a task</td>
+                                                <td>Owner/Manager</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-primary">POST</span></td>
+                                                <td><code>/api/tasks/{id}/assign/</code></td>
+                                                <td>Assign task to user</td>
+                                                <td>Project Manager</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-primary">POST</span></td>
+                                                <td><code>/api/tasks/{id}/add_comment/</code></td>
+                                                <td>Add comment to task</td>
+                                                <td>Project Member</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-primary">POST</span></td>
+                                                <td><code>/api/tasks/{id}/change_status/</code></td>
+                                                <td>Change task status</td>
+                                                <td>Assigned User</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <h6>Query Parameters for Tasks List:</h6>
+                                    <ul>
+                                        <li><code>project</code> - Filter by project ID</li>
+                                        <li><code>assigned_to</code> - Filter by user ID</li>
+                                        <li><code>status</code> - Filter by status (todo, in_progress, review, done, blocked)</li>
+                                        <li><code>priority</code> - Filter by priority (low, medium, high, urgent)</li>
+                                        <li><code>due_soon</code> - Show tasks due in next 7 days</li>
+                                        <li><code>search</code> - Search in title and description</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Users Endpoints -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usersCollapse">
+                                    <i class="fas fa-users me-2"></i> Users
+                                </button>
+                            </h2>
+                            <div id="usersCollapse" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Method</th>
+                                                <th>Endpoint</th>
+                                                <th>Description</th>
+                                                <th>Permissions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/users/</code></td>
+                                                <td>List all users</td>
+                                                <td>Authenticated</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/users/{id}/</code></td>
+                                                <td>Get user details</td>
+                                                <td>Authenticated</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/users/me/</code></td>
+                                                <td>Get current user</td>
+                                                <td>Authenticated</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/users/{id}/tasks/</code></td>
+                                                <td>Get user's tasks</td>
+                                                <td>Authenticated</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dashboard Endpoints -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardCollapse">
+                                    <i class="fas fa-chart-line me-2"></i> Dashboard
+                                </button>
+                            </h2>
+                            <div id="dashboardCollapse" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Method</th>
+                                                <th>Endpoint</th>
+                                                <th>Description</th>
+                                                <th>Permissions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/dashboard/</code></td>
+                                                <td>Get dashboard statistics</td>
+                                                <td>Authenticated</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <h6>Example Dashboard Response:</h6>
+                                    <pre class="bg-dark text-light p-3 rounded"><code>{
+  "projects_count": 5,
+  "active_projects": 3,
+  "tasks_count": 24,
+  "pending_tasks": 12,
+  "completed_tasks": 12,
+  "tasks_due_soon": 4,
+  "recent_activities": [
+    {
+      "type": "task_update",
+      "description": "Task 'Design Homepage' was updated",
+      "timestamp": "2024-03-30T14:30:00Z",
+      "project": "Website Redesign"
+    }
+  ],
+  "project_progress": [
+    {
+      "id": 1,
+      "name": "Website Redesign",
+      "progress": 65.5,
+      "status": "active"
+    }
+  ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Teams Endpoints -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#teamsCollapse">
+                                    <i class="fas fa-user-friends me-2"></i> Teams
+                                </button>
+                            </h2>
+                            <div id="teamsCollapse" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Method</th>
+                                                <th>Endpoint</th>
+                                                <th>Description</th>
+                                                <th>Permissions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/teams/</code></td>
+                                                <td>List all teams</td>
+                                                <td>Authenticated</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-primary">POST</span></td>
+                                                <td><code>/api/teams/</code></td>
+                                                <td>Create a new team</td>
+                                                <td>Authenticated</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td><code>/api/teams/{id}/</code></td>
+                                                <td>Get team details</td>
+                                                <td>Team Member</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-warning">PUT</span></td>
+                                                <td><code>/api/teams/{id}/</code></td>
+                                                <td>Update team</td>
+                                                <td>Team Lead</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge bg-danger">DELETE</span></td>
+                                                <td><code>/api/teams/{id}/</code></td>
+                                                <td>Delete team</td>
+                                                <td>Team Lead</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="mt-4">Rate Limiting</h3>
+                    <p>API requests are rate limited to ensure fair usage:</p>
+                    <ul>
+                        <li><strong>Anonymous users:</strong> 100 requests per day</li>
+                        <li><strong>Authenticated users:</strong> 1000 requests per day</li>
+                    </ul>
+
+                    <h3>Error Codes</h3>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Status Code</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge bg-success">200</span></td>
+                                <td>Success</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-primary">201</span></td>
+                                <td>Created successfully</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-warning">400</span></td>
+                                <td>Bad request - Invalid data</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-warning">401</span></td>
+                                <td>Unauthorized - Authentication required</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-warning">403</span></td>
+                                <td>Forbidden - Insufficient permissions</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-warning">404</span></td>
+                                <td>Not found - Resource doesn't exist</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-danger">429</span></td>
+                                <td>Too many requests - Rate limit exceeded</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge bg-danger">500</span></td>
+                                <td>Internal server error</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Interactive Documentation</h3>
+                    <p>For interactive API testing, visit our Swagger documentation:</p>
+                    <div class="mt-3">
+                        <a href="{% url 'api:schema-swagger-ui' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-swagger"></i> Swagger UI
+                        </a>
+                        <a href="{% url 'api:schema-redoc' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-book"></i> ReDoc
+                        </a>
+                    </div>
+
+                    <h3 class="mt-4">SDKs & Libraries</h3>
+                    <p>We provide official SDKs for popular programming languages:</p>
+                    <div class="row mt-3">
+                        <div class="col-md-3 mb-2">
+                            <a href="#" class="btn btn-outline-dark w-100">
+                                <i class="fab fa-python"></i> Python SDK
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="#" class="btn btn-outline-dark w-100">
+                                <i class="fab fa-js"></i> JavaScript SDK
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="#" class="btn btn-outline-dark w-100">
+                                <i class="fab fa-java"></i> Java SDK
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="#" class="btn btn-outline-dark w-100">
+                                <i class="fas fa-code"></i> PHP SDK
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning mt-4">
+                        <i class="fas fa-exclamation-triangle"></i> <strong>Note:</strong> API is currently in beta. Endpoints and schemas may change. Please check this documentation regularly for updates.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% block extra_js %}
+<script>
+    // Copy code snippets to clipboard
+    document.querySelectorAll('pre code').forEach(block => {
+        const pre = block.parentElement;
+        const button = document.createElement('button');
+        button.className = 'btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2';
+        button.innerHTML = '<i class="fas fa-copy"></i>';
+        button.style.position = 'absolute';
+        button.style.top = '0';
+        button.style.right = '0';
+        pre.style.position = 'relative';
+        pre.appendChild(button);
+
+        button.addEventListener('click', () => {
+            navigator.clipboard.writeText(block.textContent);
+            button.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-copy"></i>';
+            }, 2000);
+        });
+    });
+</script>
+{% endblock %}

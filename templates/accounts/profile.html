@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ profile_user.get_full_name|default:profile_user.username }}'s Profile - TaskFlow Pro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Profile Sidebar -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    {% if profile_user.avatar %}
+                    <img src="{{ profile_user.avatar.url }}" class="rounded-circle img-fluid mb-3"
+                         style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                         style="width: 150px; height: 150px;">
+                        <i class="fas fa-user-circle fa-5x text-secondary"></i>
+                    </div>
+                    {% endif %}
+
+                    <h3>{{ profile_user.get_full_name|default:profile_user.username }}</h3>
+                    <p class="text-muted">@{{ profile_user.username }}</p>
+
+                    {% if profile_user.department %}
+                    <p><i class="fas fa-building"></i> {{ profile_user.department }}</p>
+                    {% endif %}
+                    {% if profile_user.position %}
+                    <p><i class="fas fa-briefcase"></i> {{ profile_user.position }}</p>
+                    {% endif %}
+
+                    <div class="mt-3">
+                        <span class="badge bg-primary">{{ profile_user.groups.first.name|default:"Team Member" }}</span>
+                        {% if profile_user.is_available %}
+                        <span class="badge bg-success">Available</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Busy</span>
+                        {% endif %}
+                    </div>
+
+                    {% if user == profile_user %}
+                    <div class="mt-3">
+                        <a href="{% url 'accounts:edit_profile' %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="card shadow-sm mt-3">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-address-card"></i> Contact Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><i class="fas fa-envelope"></i> <strong>Email:</strong><br>{{ profile_user.email }}</p>
+                    {% if profile_user.phone_number %}
+                    <p><i class="fas fa-phone"></i> <strong>Phone:</strong><br>{{ profile_user.phone_number }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-8">
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-primary text-white shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Projects</h5>
+                            <h2 class="mb-0">{{ profile_user.projects.count }}</h2>
+                            <small>Total Projects</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-success text-white shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Tasks</h5>
+                            <h2 class="mb-0">{{ profile_user.assigned_tasks.count }}</h2>
+                            <small>Total Tasks</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-info text-white shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Teams</h5>
+                            <h2 class="mb-0">{{ profile_user.teams.count }}</h2>
+                            <small>Teams</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Tasks -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-tasks"></i> Recent Tasks</h5>
+                    <a href="{% url 'tasks:my_tasks' %}" class="text-white">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_tasks %}
+                        {% for task in recent_tasks %}
+                        <div class="border-bottom mb-2 pb-2">
+                            <a href="{% url 'tasks:detail' task.id %}" class="text-decoration-none">
+                                {{ task.title }}
+                            </a>
+                            <span class="badge bg-secondary float-end">{{ task.get_status_display }}</span>
+                            <br>
+                            <small class="text-muted">Project: {{ task.project.name }}</small>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <p class="text-muted text-center mb-0">No tasks assigned yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recent Projects -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-project-diagram"></i> Recent Projects</h5>
+                    <a href="{% url 'projects:list' %}" class="text-white">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_projects %}
+                        {% for project in recent_projects %}
+                        <div class="border-bottom mb-2 pb-2">
+                            <a href="{% url 'projects:detail' project.id %}" class="text-decoration-none">
+                                {{ project.name }}
+                            </a>
+                            <span class="badge bg-info float-end">{{ project.get_status_display }}</span>
+                            <br>
+                            <small class="text-muted">{{ project.description|truncatewords:10 }}</small>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <p class="text-muted text-center mb-0">No projects yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

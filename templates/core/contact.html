@@ -1,2 +1,97 @@
-<h1>Contact Us</h1>
-<p>Get in touch with our team.</p>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Contact Us - TaskFlow Pro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6" data-aos="fade-right">
+            <h1 class="display-4">Get in Touch</h1>
+            <p class="lead text-muted">Have questions? We'd love to hear from you!</p>
+
+            <div class="mt-4">
+                <div class="mb-4">
+                    <i class="fas fa-map-marker-alt fa-2x text-primary mb-2"></i>
+                    <h5>Visit Us</h5>
+                    <p class="text-muted">123 Business Avenue, Suite 100<br>San Francisco, CA 94105</p>
+                </div>
+
+                <div class="mb-4">
+                    <i class="fas fa-phone fa-2x text-primary mb-2"></i>
+                    <h5>Call Us</h5>
+                    <p class="text-muted">+1 (555) 123-4567<br>Mon-Fri, 9am-5pm PST</p>
+                </div>
+
+                <div class="mb-4">
+                    <i class="fas fa-envelope fa-2x text-primary mb-2"></i>
+                    <h5>Email Us</h5>
+                    <p class="text-muted">support@taskflowpro.com<br>sales@taskflowpro.com</p>
+                </div>
+
+                <div>
+                    <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                    <h5>Support Hours</h5>
+                    <p class="text-muted">Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday - Sunday: Closed</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6" data-aos="fade-left">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-paper-plane"></i> Send us a Message</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject *</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message *</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="newsletter" name="newsletter">
+                            <label class="form-check-label" for="newsletter">
+                                Subscribe to our newsletter for updates and tips
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h5>Frequently Asked Questions</h5>
+                    <p class="text-muted">Quick answers to common questions</p>
+                    <a href="#" class="btn btn-outline-primary mt-2">Visit FAQ Page</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

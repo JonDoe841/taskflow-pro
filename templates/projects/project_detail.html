@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load project_tags %}
+
+{% block title %}{{ project.name }} - TaskFlow Pro{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Project Header -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-0">{{ project.name }}</h2>
+                    <small class="text-white-50">Created {{ project.created_at|date:"M d, Y" }} by {{ project.created_by.username }}</small>
+                </div>
+                <div>
+                    <span class="badge bg-{{ project.status|status_color }} me-2">
+                        {{ project.get_status_display }}
+                    </span>
+                    <span class="badge bg-{{ project.priority|priority_color }}">
+                        {{ project.get_priority_display }} Priority
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5>Description</h5>
+                    <p>{{ project.description|linebreaks }}</p>
+                    
+                    {% if project.technologies.all %}
+                    <h5>Technologies</h5>
+                    <div class="mb-3">
+                        {% for tech in project.technologies.all %}
+                        <span class="badge bg-secondary me-1">
+                            <i class="{{ tech.icon }}"></i> {{ tech.name }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6>Project Details</h6>
+                            <hr>
+                            <p><i class="fas fa-calendar"></i> <strong>Start Date:</strong> {{ project.start_date|date:"M d, Y" }}</p>
+                            <p><i class="fas fa-hourglass-end"></i> <strong>Deadline:</strong> {{ project.deadline|date:"M d, Y" }}</p>
+                            <p><i class="fas fa-users"></i> <strong>Members:</strong> {{ project.members.count }}</p>
+                            <p><i class="fas fa-clock"></i> <strong>Hours:</strong> {{ project.hours_logged }}/{{ project.hours_estimated }}</p>
+                            <p><i class="fas fa-dollar-sign"></i> <strong>Budget:</strong> ${{ project.budget|default:"0" }}</p>
+                            
+                            <div class="mt-3">
+                                <div class="progress mb-2" style="height: 20px;">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: {{ project.progress_percentage }}%">
+                                        {{ project.progress_percentage }}%
+                                    </div>
+                                </div>
+                                <small class="text-muted">Overall Progress</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-footer bg-transparent">
+            <div class="d-flex justify-content-between">
+                <div>
+                    {% if user.is_authenticated and user == project.created_by %}
+                    <a href="{% url 'projects:update' project.id %}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i> Edit Project
+                    </a>
+                    <a href="{% url 'projects:delete' project.id %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Delete Project
+                    </a>
+                    {% endif %}
+                </div>
+                <div>
+                    {% if user.is_authenticated %}
+                        {% if is_member %}
+                        <span class="badge bg-success">You are a member</span>
+                        {% else %}
+                        <form method="post" action="{% url 'projects:join' project.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fas fa-user-plus"></i> Join Project
+                            </button>
+                        </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tasks Section -->
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-tasks"></i> Tasks</h5>
+                    {% if perms.tasks.add_task and is_member %}
+                    <a href="{% url 'tasks:create' %}?project={{ project.id }}" class="btn btn-light btn-sm">
+                        <i class="fas fa-plus"></i> Add Task
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="taskTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="todo-tab" data-bs-toggle="tab" data-bs-target="#todo" type="button" role="tab">
+                                To Do <span class="badge bg-secondary">{{ todo_tasks|length }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="inprogress-tab" data-bs-toggle="tab" data-bs-target="#inprogress" type="button" role="tab">
+                                In Progress <span class="badge bg-warning">{{ in_progress_tasks|length }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="done-tab" data-bs-toggle="tab" data-bs-target="#done" type="button" role="tab">
+                                Done <span class="badge bg-success">{{ done_tasks|length }}</span>
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content mt-3">
+                        <!-- Todo Tasks -->
+                        <div class="tab-pane fade show active" id="todo" role="tabpanel">
+                            <div class="list-group">
+                                {% for task in todo_tasks %}
+                                <a href="{% url 'tasks:detail' task.id %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">{{ task.title }}</h6>
+                                            <small class="text-muted">Due: {{ task.due_date|date:"M d, Y" }}</small>
+                                        </div>
+                                        <span class="badge bg-{{ task.priority|priority_color }}">
+                                            {{ task.get_priority_display }}
+                                        </span>
+                                    </div>
+                                </a>
+                                {% empty %}
+                                <p class="text-muted text-center py-3">No tasks in To Do</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- In Progress Tasks -->
+                        <div class="tab-pane fade" id="inprogress" role="tabpanel">
+                            <div class="list-group">
+                                {% for task in in_progress_tasks %}
+                                <a href="{% url 'tasks:detail' task.id %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">{{ task.title }}</h6>
+                                            <small class="text-muted">Assigned to: {{ task.assigned_to.username|default:"Unassigned" }}</small>
+                                        </div>
+                                        <span class="badge bg-{{ task.priority|priority_color }}">
+                                            {{ task.get_priority_display }}
+                                        </span>
+                                    </div>
+                                </a>
+                                {% empty %}
+                                <p class="text-muted text-center py-3">No tasks in progress</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Done Tasks -->
+                        <div class="tab-pane fade" id="done" role="tabpanel">
+                            <div class="list-group">
+                                {% for task in done_tasks %}
+                                <a href="{% url 'tasks:detail' task.id %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">{{ task.title }}</h6>
+                                            <small class="text-muted">Completed: {{ task.completed_at|date:"M d, Y" }}</small>
+                                        </div>
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                </a>
+                                {% empty %}
+                                <p class="text-muted text-center py-3">No completed tasks</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if project.tasks.count > 5 %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'tasks:list' %}?project={{ project.id }}" class="btn btn-outline-primary">
+                            View All Tasks <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+<!-- Team Members Section -->
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-users"></i> Team Members</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for membership in memberships %}
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                {% if membership.user.avatar %}
+                                <img src="{{ membership.user.avatar.url }}" class="rounded-circle mb-2" width="80" height="80" style="object-fit: cover;">
+                                {% else %}
+                                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-user-circle fa-3x text-secondary"></i>
+                                </div>
+                                {% endif %}
+                                <h6 class="card-title">{{ membership.user.get_full_name|default:membership.user.username }}</h6>
+                                <p class="text-muted small">@{{ membership.user.username }}</p>
+                                <span class="badge bg-info">{{ membership.get_role_display }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center">No team members yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#tasksTable').DataTable({
+            pageLength: 10,
+            order: [[4, 'desc']],
+            language: {
+                search: "Search tasks:"
+            }
+        });
+    });
+</script>
+{% endblock %}

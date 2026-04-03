@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Analytics Dashboard - TaskFlow Pro{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4"><i class="fas fa-chart-line"></i> Analytics Dashboard</h1>
+
+    <!-- KPI Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5>Total Projects</h5>
+                    <h2>{{ total_projects }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5>Completed Tasks</h5>
+                    <h2>{{ completed_tasks }}/{{ total_tasks }}</h2>
+                    <small>{{ completion_rate }}% completion rate</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5>Active Projects</h5>
+                    <h2>{{ active_projects }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5>Pending Tasks</h5>
+                    <h2>{{ pending_tasks }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Task Status Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="taskStatusChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Task Priority Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="taskPriorityChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Project Progress</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="projectProgressChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Project Status</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="projectStatusChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Task Status Chart
+const statusCtx = document.getElementById('taskStatusChart').getContext('2d');
+new Chart(statusCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ status_labels|safe }},
+        datasets: [{
+            data: {{ status_data|safe }},
+            backgroundColor: ['#6c757d', '#ffc107', '#0d6efd', '#198754', '#dc3545']
+        }]
+    }
+});
+
+// Task Priority Chart
+const priorityCtx = document.getElementById('taskPriorityChart').getContext('2d');
+new Chart(priorityCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ priority_labels|safe }},
+        datasets: [{
+            label: 'Number of Tasks',
+            data: {{ priority_data|safe }},
+            backgroundColor: ['#0dcaf0', '#ffc107', '#dc3545', '#fd7e14']
+        }]
+    }
+});
+
+// Project Progress Chart
+const progressCtx = document.getElementById('projectProgressChart').getContext('2d');
+new Chart(progressCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ project_labels|safe }},
+        datasets: [{
+            label: 'Progress (%)',
+            data: {{ project_progress_data|safe }},
+            backgroundColor: '#0d6efd'
+        }]
+    },
+    options: {
+        scales: { y: { beginAtZero: true, max: 100 } }
+    }
+});
+
+// Project Status Chart
+const statusPieCtx = document.getElementById('projectStatusChart').getContext('2d');
+new Chart(statusPieCtx, {
+    type: 'pie',
+    data: {
+        labels: {{ status_labels_pie|safe }},
+        datasets: [{
+            data: {{ status_counts_data|safe }},
+            backgroundColor: ['#6c757d', '#0d6efd', '#ffc107', '#198754', '#dc3545']
+        }]
+    }
+});
+</script>
+{% endblock %}
