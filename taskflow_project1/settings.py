@@ -1,3 +1,4 @@
+import sys
 import os
 from pathlib import Path
 import environ
@@ -46,8 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sslserver'
 ] + THIRD_PARTY_APPS + LOCAL_APPS
+if DEBUG and not os.environ.get('RENDER'):
+    INSTALLED_APPS.append('sslserver')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -58,7 +60,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+if not os.environ.get('RENDER'):
+    INSTALLED_APPS.append('sslserver')
 ROOT_URLCONF = 'taskflow_project1.urls'
 
 TEMPLATES = [
