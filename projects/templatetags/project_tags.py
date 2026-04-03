@@ -1,4 +1,5 @@
 from django import template
+
 register = template.Library()
 
 @register.filter
@@ -21,6 +22,7 @@ def priority_color(priority):
         'critical': 'dark',
     }
     return colors.get(priority, 'secondary')
+
 @register.simple_tag
 def project_progress_class(percentage):
     if percentage < 30:
@@ -29,5 +31,3 @@ def project_progress_class(percentage):
         return 'bg-warning'
     else:
         return 'bg-success'
-
-

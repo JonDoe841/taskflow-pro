@@ -1,0 +1,55 @@
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-filter"></i> Filters</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" id="filterForm">
+            <!-- Search -->
+            <div class="mb-3">
+                <label class="form-label" for="searchInput">Search</label>
+                <div class="input-group">
+                    <input type="text" id="searchInput" name="search" class="form-control"
+                           placeholder="Search..." value="{{ request.GET.search|default:'' }}">
+                    <button class="btn btn-outline-secondary" type="submit" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="mb-3">
+                <label class="form-label" for="statusSelect">Status</label>
+                <select id="statusSelect" name="status" class="form-select" onchange="this.form.submit()">
+                    <option value="">All</option>
+                    {% for status_value, status_label in status_choices %}
+                    <option value="{{ status_value }}"
+                        {% if request.GET.status|default:'' == status_value %}selected{% endif %}>
+                        {{ status_label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Priority Filter -->
+            <div class="mb-3">
+                <label class="form-label" for="prioritySelect">Priority</label>
+                <select id="prioritySelect" name="priority" class="form-select" onchange="this.form.submit()">
+                    <option value="">All</option>
+                    {% for priority_value, priority_label in priority_choices %}
+                    <option value="{{ priority_value }}"
+                        {% if request.GET.priority|default:'' == priority_value %}selected{% endif %}>
+                        {{ priority_label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!--Filters Button -->
+            {% if request.GET.search or request.GET.status or request.GET.priority %}
+            <a href="?" class="btn btn-outline-secondary w-100 mt-2">
+                <i class="fas fa-times"></i> Clear Filters
+            </a>
+            {% endif %}
+        </form>
+    </div>
+</div>

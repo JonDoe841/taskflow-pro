@@ -1,2 +1,136 @@
-<h1>About Us</h1>
-<p>Welcome to TaskFlow Pro!</p>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - TaskFlow Pro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 text-center mb-5">
+            <h1 class="display-4">About TaskFlow Pro</h1>
+            <p class="lead text-muted">Empowering teams to work smarter, not harder</p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6" data-aos="fade-right">
+            <h3>Our Mission</h3>
+            <p class="lead">To simplify project management and help teams achieve their goals efficiently.</p>
+            <p>At TaskFlow Pro, we believe that great teams deserve great tools. Our platform is designed to streamline workflow, enhance collaboration, and provide actionable insights that drive success.</p>
+            <p>Founded in 2024, TaskFlow Pro has quickly become the go-to solution for teams looking to optimize their project management processes. Our intuitive interface, powerful features, and commitment to innovation set us apart.</p>
+        </div>
+        <div class="col-md-6" data-aos="fade-left">
+            {% comment %} Temporarily comment out missing image {% endcomment %}
+            <div class="bg-light rounded shadow-sm p-5 text-center">
+                <i class="fas fa-users fa-4x text-primary"></i>
+                <p class="mt-2 text-muted">Team photo coming soon</p>
+            </div>
+            {% comment %} <img src="{% static 'images/about-hero.jpg' %}" alt="About Us" class="img-fluid rounded shadow-sm"> {% endcomment %}
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+            <h3>Our Core Values</h3>
+        </div>
+        <div class="col-md-4 mb-3" data-aos="fade-up">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-heart fa-3x text-primary mb-3"></i>
+                    <h5>Customer First</h5>
+                    <p class="text-muted">We put our users at the center of everything we do, constantly improving based on feedback.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-lightbulb fa-3x text-primary mb-3"></i>
+                    <h5>Innovation</h5>
+                    <p class="text-muted">We continuously push boundaries to deliver cutting-edge solutions.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="200">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-handshake fa-3x text-primary mb-3"></i>
+                    <h5>Integrity</h5>
+                    <p class="text-muted">We operate with transparency, honesty, and respect for our users and partners.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h3>Meet Our Team</h3>
+            <p class="text-muted mb-4">The passionate people behind TaskFlow Pro</p>
+        </div>
+
+        <div class="col-md-3 mb-4" data-aos="fade-up">
+            <div class="card text-center">
+                <div class="bg-light p-5 text-center">
+                    <i class="fas fa-user-circle fa-4x text-secondary"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">John Doe</h5>
+                    <p class="card-text text-muted">CEO & Founder</p>
+                    <div class="social-links">
+                        <a href="#" class="text-muted me-2"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="card text-center">
+                <div class="bg-light p-5 text-center">
+                    <i class="fas fa-user-circle fa-4x text-secondary"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Jane Smith</h5>
+                    <p class="card-text text-muted">CTO</p>
+                    <div class="social-links">
+                        <a href="#" class="text-muted me-2"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="card text-center">
+                <div class="bg-light p-5 text-center">
+                    <i class="fas fa-user-circle fa-4x text-secondary"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Mike Johnson</h5>
+                    <p class="card-text text-muted">Lead Developer</p>
+                    <div class="social-links">
+                        <a href="#" class="text-muted me-2"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="card text-center">
+                <div class="bg-light p-5 text-center">
+                    <i class="fas fa-user-circle fa-4x text-secondary"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Sarah Williams</h5>
+                    <p class="card-text text-muted">Product Manager</p>
+                    <div class="social-links">
+                        <a href="#" class="text-muted me-2"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

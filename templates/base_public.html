@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 100px 0;
+        margin-bottom: 50px;
+    }
+    .feature-card {
+        transition: transform 0.3s;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .feature-card:hover {
+        transform: translateY(-10px);
+    }
+    .testimonial-card {
+        background: #f8f9fa;
+        border-left: 4px solid #667eea;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold" data-aos="fade-up">{% block hero_title %}Welcome to TaskFlow Pro{% endblock %}</h1>
+        <p class="lead mt-3" data-aos="fade-up" data-aos-delay="100">{% block hero_subtitle %}Streamline your workflow and boost team productivity{% endblock %}</p>
+        {% block hero_buttons %}
+        <div class="mt-4" data-aos="fade-up" data-aos-delay="200">
+            <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg me-3">Get Started Free</a>
+            <a href="{% url 'projects:list' %}" class="btn btn-outline-light btn-lg">View Projects</a>
+        </div>
+        {% endblock %}
+    </div>
+</div>
+
+<div class="container">
+    {% block public_content %}{% endblock %}
+</div>
+{% endblock %}

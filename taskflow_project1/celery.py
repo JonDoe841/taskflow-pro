@@ -2,9 +2,9 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taskflow_pro.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taskflow_project1.settings')
 
-app = Celery('taskflow_pro')
+app = Celery('taskflow_project1')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 

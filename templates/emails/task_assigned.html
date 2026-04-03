@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Task Assigned</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        .content {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+        }
+        .task-details {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        .button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 New Task Assigned!</h1>
+            <p>You have been assigned a new task</p>
+        </div>
+        <div class="content">
+            <p>Hello <strong>{{ user.get_full_name|default:user.username }}</strong>,</p>
+            <p>{{ assigned_by }} has assigned you a new task in project <strong>{{ project }}</strong>.</p>
+
+            <div class="task-details">
+                <h3>{{ task.title }}</h3>
+                <p>{{ task.description|truncatewords:50 }}</p>
+                <hr>
+                <p><strong>📅 Due Date:</strong> {{ due_date|date:"F d, Y H:i" }}</p>
+                <p><strong>⭐ Priority:</strong> {{ task.get_priority_display }}</p>
+                <p><strong>📊 Status:</strong> {{ task.get_status_display }}</p>
+            </div>
+
+            <p>Please review the task details and start working on it as soon as possible.</p>
+
+            <a href="{{ task_url }}" class="button">View Task Details</a>
+
+            <div class="footer">
+                <p>This is an automated notification from TaskFlow Pro.</p>
+                <p>&copy; {% now "Y" %} TaskFlow Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

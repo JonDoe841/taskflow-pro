@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: taskflow-pro
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: gunicorn taskflow_project1.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: taskflow-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: taskflow-redis
+          property: connectionString
+
+  - type: worker
+    name: taskflow-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A taskflow_project1 worker --loglevel=info
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: taskflow-redis
+          property: connectionString
+    runtime: docker
+
+  - type: redis
+    name: taskflow-redis
+    ipAllowList: [ ]
+    plan: free
+
+databases:
+  - name: taskflow-db
+    databaseName: taskflow
+    user: taskflow_user
+    plan: free
+
+
+
+

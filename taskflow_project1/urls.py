@@ -18,21 +18,23 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
-handler404 = 'core.views.handler404'
-handler500 = 'core.views.handler500'
-handler403 = 'core.views.handler403'
-handler400 = 'core.views.handler400'
 urlpatterns = [
-    path('', include('core.urls')),
     path('admin/', admin.site.urls),
+    path('', include('core.urls')),
     path('accounts/', include('accounts.urls')),
     path('projects/', include('projects.urls')),
     path('tasks/', include('tasks.urls')),
     path('teams/', include('teams.urls')),
     path('analytics/', include('analytics.urls')),
-
+    path('api/', include('api.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler400 = 'core.views.handler400'
+handler403 = 'core.views.handler403'
+handler404 = 'core.views.handler404'
+handler500 = 'core.views.handler500'

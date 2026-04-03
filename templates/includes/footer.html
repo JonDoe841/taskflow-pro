@@ -1,0 +1,74 @@
+<footer class="bg-dark text-white mt-5 pt-5 pb-3">
+    <div class="container">
+        <div class="row">
+            <!-- Brand & Social -->
+            <div class="col-md-4 mb-4">
+                <h5><i class="fas fa-tasks"></i> TaskFlow Pro</h5>
+                <p class="text-white-50">
+                    Collaborative task management for modern teams. Streamline your workflow and boost productivity.
+                </p>
+                <div class="social-links mt-3">
+                    <a href="https://facebook.com" class="text-white-50 me-3" aria-label="Facebook">
+                        <i class="fab fa-facebook-f fa-lg"></i>
+                    </a>
+                    <a href="https://twitter.com" class="text-white-50 me-3" aria-label="Twitter">
+                        <i class="fab fa-twitter fa-lg"></i>
+                    </a>
+                    <a href="https://linkedin.com" class="text-white-50 me-3" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in fa-lg"></i>
+                    </a>
+                    <a href="https://github.com" class="text-white-50" aria-label="GitHub">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-2 mb-4">
+                <h6>Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'core:home' %}" class="text-white-50 text-decoration-none">Home</a></li>
+                    <li><a href="{% url 'projects:list' %}" class="text-white-50 text-decoration-none">Projects</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'tasks:list' %}" class="text-white-50 text-decoration-none">Tasks</a></li>
+                    <li><a href="{% url 'teams:list' %}" class="text-white-50 text-decoration-none">Teams</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Company Links -->
+            <div class="col-md-2 mb-4">
+                <h6>Company</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'core:about' %}" class="text-white-50 text-decoration-none">About Us</a></li>
+                    <li><a href="{% url 'core:blog' %}" class="text-white-50 text-decoration-none">Blog</a></li>
+                    <li><a href="{% url 'core:contact' %}" class="text-white-50 text-decoration-none">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="col-md-4 mb-4">
+                <h6>Newsletter</h6>
+                <p class="text-white-50 small">Subscribe to get updates on new features</p>
+                <form class="newsletter-form" method="post" action="{% url 'core:subscribe_newsletter' %}">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="email" name="email" class="form-control" placeholder="Your email address" required>
+                        <button class="btn btn-primary" type="submit">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <hr class="bg-light">
+
+        <!-- Footer Bottom -->
+        <div class="text-center">
+            <small class="text-white-50">
+                &copy; {% now "Y" %} TaskFlow Pro. All rights reserved.
+                <a href="{% url 'core:privacy' %}" class="text-white-50">Privacy Policy</a> |
+                <a href="{% url 'core:terms' %}" class="text-white-50">Terms of Service</a>
+            </small>
+        </div>
+    </div>
+</footer>
