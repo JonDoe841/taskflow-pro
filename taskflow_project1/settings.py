@@ -1,6 +1,8 @@
 import sys
 import os
 from pathlib import Path
+
+import dj_database_url
 import environ
 from django.contrib.messages import constants as messages
 
@@ -82,7 +84,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'taskflow_project1.wsgi.application'
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -93,8 +95,15 @@ DATABASES = {
         'PORT': env('DATABASE_PORT', default='5432'),
     }
 }
-
-
+'''
+DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASES = {
+    'default': dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 AUTH_USER_MODEL = 'accounts.User'
 
 AUTH_PASSWORD_VALIDATORS = [
